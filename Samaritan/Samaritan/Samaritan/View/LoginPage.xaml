@@ -6,7 +6,7 @@
              BackgroundImage="nslBackgroundColor.png">
     <ContentPage.Content>
         <Grid Padding="10,50,10,10"
-              RowSpacing="10">
+              RowSpacing="20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
                 <RowDefinition Height="Auto"/>   
