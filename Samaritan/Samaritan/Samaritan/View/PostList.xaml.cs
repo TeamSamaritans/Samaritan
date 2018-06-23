@@ -37,11 +37,6 @@ namespace Samaritan.View
         public PostList ()
 		{
 			InitializeComponent ();
-            //Images = new ObservableCollection<ImageList>();
-            //Images.Add(new ImageList() { id = "1", image_src = "www.google.com" });
-            //Images.Add(new ImageList() { id = "1", image_src = "www.google.com" });
-            //Images.Add(new ImageList() { id = "1", image_src = "www.google.com" });
-            //Images.Add(new ImageList() { id = "1", image_src = "www.google.com" });
             this.BindingContext = this;
 		}
 
@@ -75,6 +70,25 @@ namespace Samaritan.View
                     }
                 }
             }
+        }
+
+        private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
+        {
+            var value = e as TappedEventArgs;
+            if (value != null)
+            {
+                await Navigation.PushAsync(new ShowPost(value.Parameter.ToString()));
+            }
+        }
+
+        private async void ToolbarItem_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new AddPost());
+        }
+
+        private void ToolbarItem_Clicked_1(object sender, EventArgs e)
+        {
+            
         }
     }
 }

@@ -7,9 +7,9 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Icon="add.png" 
-                     Priority="0"/>
+                     Priority="0" Clicked="ToolbarItem_Clicked"/>
         <ToolbarItem Icon="logout.png"
-                     Priority="1"/>
+                     Priority="1" Clicked="ToolbarItem_Clicked_1"/>
     </ContentPage.ToolbarItems>
     
     <Grid Padding="5">
@@ -35,7 +35,11 @@
                             </Grid.RowDefinitions>
                             <Image Source="{Binding image_src}" 
                                    Grid.Row="0"
-                                   Aspect="AspectFill"/>
+                                   Aspect="AspectFill">
+                                <Image.GestureRecognizers>
+                                    <TapGestureRecognizer CommandParameter="{Binding id}"  Tapped="TapGestureRecognizer_Tapped"/>
+                                </Image.GestureRecognizers>
+                            </Image>
                             <Label Text="Updated at : 23 Jun 2018, 07:00 PM"
                                    Grid.Row="1"/>
                         </Grid>
