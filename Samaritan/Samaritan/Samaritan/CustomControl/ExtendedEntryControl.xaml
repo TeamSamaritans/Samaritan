@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Samaritan.CustomControl.ExtendedEntryControl"
+             xmlns:CustomRenderer="clr-namespace:Samaritan.CustomRenderer">
+    <ContentView.Content>
+        <StackLayout >
+            <Grid Padding="5,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="{Binding SourceValue}" />
+                <CustomRenderer:BorderlessEntry x:Name="entry" Text="{Binding TextValue}" Grid.Column="1" VerticalOptions="Center" BackgroundColor="Transparent" Placeholder="{Binding PlaceHolderValue}" TextColor="White" PlaceholderColor="White" FontSize="Small"/>
+            </Grid>
+            <BoxView Margin="5,0,5,0" HeightRequest="1" HorizontalOptions="FillAndExpand" Color="White"/>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>
