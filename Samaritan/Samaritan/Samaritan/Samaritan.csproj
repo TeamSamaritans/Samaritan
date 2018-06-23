@@ -5,6 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="CustomRenderer\**" />
+    <EmbeddedResource Remove="CustomRenderer\**" />
+    <None Remove="CustomRenderer\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Acr.UserDialogs" Version="7.0.0" />
     <PackageReference Include="FubarCoder.RestSharp.Portable" Version="3.3.0" />
     <PackageReference Include="FubarCoder.RestSharp.Portable.Core" Version="4.0.8" />
@@ -26,9 +32,5 @@
     <EmbeddedResource Update="View\PostList.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="CustomRenderer\" />
   </ItemGroup>
 </Project>

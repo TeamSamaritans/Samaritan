@@ -17,8 +17,8 @@
             <Image Source="lblogo.png"/>
 
             <StackLayout Grid.Row="1" HorizontalOptions="Center" VerticalOptions="Center" Padding="15,0" Spacing="30">
-                <CustomControl:ExtendedEntryControl x:Name="emailEntry" PlaceHolderValue="Email" SourceValue="mail.png"/>
-                <CustomControl:ExtendedEntryControl x:Name="passwordEntry" PlaceHolderValue="Password" SourceValue="lock.png" IsPassword="True"/>
+                <CustomControl:ExtendedEntryControl x:Name="emailEntry" TextValue="rajesh.tiwari@taritas.com" PlaceHolderValue="Email" SourceValue="mail.png"/>
+                <CustomControl:ExtendedEntryControl x:Name="passwordEntry" TextValue="123456" PlaceHolderValue="Password" SourceValue="lock.png" IsPassword="True"/>
             </StackLayout>
 
             <Grid Grid.Row="2">

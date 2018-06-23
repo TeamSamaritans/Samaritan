@@ -21,16 +21,15 @@ namespace Samaritan.View
         public LoginPage()
         {
             InitializeComponent();
-            //this.loginBtn.TappedCommand = new Command(this.LoginButtonTapped);
-            //this.emailEntry.TextCompleteCommand = new Command(this.EmailEntryCompleted);
+            this.loginBtn.TappedCommand = new Command(this.LoginButtonTapped);
         }
         //login button clicked event
         public async void LoginButtonTapped(object obj)
         {
             string email;
             string password;
-            email = "rajesh.tiwari@taritas.com";// emailEntry.TextValue;
-            password = "123456";// passwordEntry.TextValue;
+            email = emailEntry.TextValue;
+            password = passwordEntry.TextValue;
             //check for empty Email
             if (!string.IsNullOrEmpty(email))
             {
@@ -60,10 +59,10 @@ namespace Samaritan.View
         }
         public void EmailEntryCompleted(object obj)
         {
-            //if (!string.IsNullOrEmpty(emailEntry.TextValue))
-            //{
-            //    this.passwordEntry.GetFocus();
-            //};
+            if (!string.IsNullOrEmpty(emailEntry.TextValue))
+            {
+                this.passwordEntry.Focus();
+            };
         }
         private async Task ValidateAndSaveCredentials(string email, string password)
         {
@@ -101,29 +100,6 @@ namespace Samaritan.View
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            GetCredentialsFromSettings();
-            LoginButtonTapped(null);
-        }
-        public void GetCredentialsFromSettings()
-        {
-            string email = string.Empty;
-            string password = string.Empty;
-            bool isRememberMe = false;
-            //var userSettings = Settings.UserProfileSettings;
-            //loggedInSwitch.IsToggled = false;
-            //if (userSettings != null && string.IsNullOrWhiteSpace(userSettings) == false)
-            //{
-            //    var result = JsonConvert.DeserializeObject<LoginRequest>(userSettings);
-            //    if (result != null)
-            //    {
-            //        email = result.Email;
-            //        password = result.Password;
-            //        isRememberMe = true;
-            //    }
-            //}
-            //emailEntry.TextValue = email;
-            //passwordEntry.TextValue = password;
-            //loggedInSwitch.IsToggled = isRememberMe;
         }
     }
 }
