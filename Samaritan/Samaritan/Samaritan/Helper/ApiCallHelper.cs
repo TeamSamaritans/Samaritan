@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using RestSharp.Portable;
 using RestSharp.Portable.HttpClient;
+using Samaritan.Classes;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -30,7 +31,7 @@ namespace Samaritan.Helper
 
         public static async Task<IRestResponse<T>> BaseRequest<T>(RestRequest request, string action = "Action", bool withAuthentication = true, bool showError = true, bool excludeTimeout = false)
         {
-            BaseAddress = "http://taritas.in/left-behind/api/Site/";
+            BaseAddress = "http://taritas.in/left-behind/api/";
 
             var client = new RestClient(BaseAddress);
             IRestResponse<T> response;
@@ -156,13 +157,27 @@ namespace Samaritan.Helper
 
         public static async Task<IRestResponse<HttpResponseMessage>> ValidateUser(LoginRequest loginRequest)
         {
-            var request = new RestRequest("login", Method.POST);
+            var request = new RestRequest("Site/login", Method.POST);
             //request.AddJsonBody(loginRequest);
             //request.AddBody(loginRequest);
             request.AddParameter("email", loginRequest.Email);
             request.AddParameter("password", loginRequest.Password);
             return await BaseRequest<HttpResponseMessage>(request, "login", true);
         }
+
+        //public static async Task<IRestResponse<HttpResponseMessage>> GetAllPosts()
+        //{
+        //    var request = new RestRequest("Record/getRecord", Method.POST);
+        //    return await BaseRequest<HttpResponseMessage>(request, "getRecord", true);
+        //}
+
+        public static async Task<IRestResponse<ResponseObject<ImageList>>> GetAllPosts()
+        {
+            var request = new RestRequest("Record/getRecord", Method.GET);
+            return await BaseRequest<ResponseObject<ImageList>> (request, "getRecord", true);
+        }
+
+
 
         //public static async Task<IRestResponse<HttpResponseMessage>> UserRegistration(RegistrationRequest registrationRequest)
         //{
