@@ -3,6 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Samaritan.App">
 	<Application.Resources>
-    
-	</Application.Resources>
+        <!-- Application resource dictionary -->
+        <ResourceDictionary>
+            <Color x:Key="BlueColor">#2699FB</Color>
+            <Color x:Key="HeaderBlueColor">#03A9F4</Color>
+            <Color x:Key="ItemTemplateBlueColor">#0084C4</Color>
+            <Color x:Key="FooterBlueColor">#0393D9</Color>
+            <Style x:Key="SocialShareButton" TargetType="Button">
+                <Setter Property="BackgroundColor" Value="{StaticResource BlueColor}"/>
+                <Setter Property="TextColor" Value="White"/>
+                <Setter Property="FontSize" Value="Micro"/>
+                <Setter Property="FontAttributes" Value="Bold"/>
+            </Style>
+
+            <Style TargetType="NavigationPage">
+                <Setter Property="BarBackgroundColor" Value="Color.Black"/>
+                <!--<Setter Property="BarTextColor" Value="Color.Green"/>-->
+            </Style>
+        </ResourceDictionary>
+    </Application.Resources>
 </Application>
