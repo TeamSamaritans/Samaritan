@@ -4,7 +4,9 @@
              x:Class="Samaritan.View.AddPost">
     <ContentPage.ToolbarItems>
         <ToolbarItem Icon="uploadpost.png" 
-                     Priority="0"/>
+                     Priority="0"
+                     x:Name="toolbarItemUpload"
+                     Clicked="toolbarItemUpload_Clicked"/>
     </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <Grid>
@@ -13,7 +15,11 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Image Grid.Row="1" Source="picture.png" VerticalOptions="Center" HorizontalOptions="Center"/>
+            <Image Grid.Row="1" x:Name="image" Source="picture.png" VerticalOptions="Center" HorizontalOptions="Center" Aspect="AspectFill">
+                <Image.GestureRecognizers>
+                    <TapGestureRecognizer x:Name="imageTapGestureRecognizer" Tapped="OnImageTapped"/>
+                </Image.GestureRecognizers>
+            </Image>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

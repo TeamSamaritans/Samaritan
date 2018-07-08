@@ -18,9 +18,9 @@ namespace Samaritan.View
 	[XamlCompilation(XamlCompilationOptions.Compile)]
 	public partial class PostList : ContentPage
 	{
-        private ObservableCollection<ImageList> _images;
+        private ObservableCollection<Post> _images;
 
-        public ObservableCollection<ImageList> Images
+        public ObservableCollection<Post> Images
         {
             get { return _images; }
             set
@@ -32,7 +32,7 @@ namespace Samaritan.View
 
         public int ImageId { get; set; }
 
-        public ImageList ImageObject { get; set; }
+        public Post ImageObject { get; set; }
 
         public PostList ()
 		{
@@ -55,7 +55,7 @@ namespace Samaritan.View
                 {
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
-                        var imageData = JsonConvert.DeserializeObject<ResponseObject<List<ImageList>>>(response.Content);
+                        var imageData = JsonConvert.DeserializeObject<ResponseObject<List<Post>>>(response.Content);
                         if (imageData != null)
                         {
                             if (imageData.StatusCode == HttpStatusCode.BadRequest)
@@ -64,7 +64,7 @@ namespace Samaritan.View
                             }
                             else
                             {
-                                Images = new ObservableCollection<ImageList>(imageData.Response);
+                                Images = new ObservableCollection<Post>(imageData.Response);
                             }
                         }
                     }

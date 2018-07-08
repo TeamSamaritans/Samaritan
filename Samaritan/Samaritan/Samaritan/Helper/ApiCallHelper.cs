@@ -171,13 +171,21 @@ namespace Samaritan.Helper
         //    return await BaseRequest<HttpResponseMessage>(request, "getRecord", true);
         //}
 
-        public static async Task<IRestResponse<ResponseObject<ImageList>>> GetAllPosts()
+        public static async Task<IRestResponse<ResponseObject<Post>>> GetAllPosts()
         {
             var request = new RestRequest("Record/getRecord", Method.GET);
-            return await BaseRequest<ResponseObject<ImageList>> (request, "getRecord", true);
+            return await BaseRequest<ResponseObject<Post>> (request, "getRecord", true);
         }
 
-
+        public static async Task<IRestResponse<HttpResponseMessage>> UploadPost(Post Post)
+        {
+            var request = new RestRequest("Record/uploadRecord", Method.POST);
+            request.AddParameter("user_id", Post.id);
+            request.AddParameter("file", Post.file);
+            request.AddParameter("longitude", Post.longitude);
+            request.AddParameter("latitude", Post.latitude);
+            return await BaseRequest<HttpResponseMessage>(request, "uploadRecord", true);
+        }
 
         //public static async Task<IRestResponse<HttpResponseMessage>> UserRegistration(RegistrationRequest registrationRequest)
         //{

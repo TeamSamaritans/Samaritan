@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Samaritan.Classes
 {
-   public class ImageList : BaseModel
+    public class Post : BaseModel
     {
         public string id { get; set; }
         public string user_id { get; set; }
@@ -13,5 +13,6 @@ namespace Samaritan.Classes
         public string latitude { get; set; }
         public string craeted_at { get; set; }
         public string updated_at { get; set; }
+        public string file { get; set; }
     }
 }
