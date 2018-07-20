@@ -1,7 +1,4 @@
 ﻿using Samaritan.Classes;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Samaritan.Helper
 {
@@ -40,6 +37,11 @@ namespace Samaritan.Helper
         /// </summary>
         public readonly static string TextAuthToken = "AuthToken";
 
+        public static string Source { get; set; }
+
+        public static double Longitude { get; set; }
+
+        public static double Latitude { get; set; }
 
         /// <summary>
         /// Gets authtoken value

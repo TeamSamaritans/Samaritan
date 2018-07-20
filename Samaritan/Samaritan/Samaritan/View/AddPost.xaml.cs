@@ -1,5 +1,8 @@
 ﻿using Acr.UserDialogs;
 using Newtonsoft.Json;
+using Plugin.Connectivity;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
 using Plugin.Media.Abstractions;
 using Plugin.Permissions.Abstractions;
@@ -23,6 +26,9 @@ namespace Samaritan.View
     public partial class AddPost : ContentPage
     {
         private string _imageSource;
+        private bool _isPostUploaded;
+        public double Latitude { get; private set; }
+        public double Longitude { get; private set; }
 
         public AddPost()
         {
@@ -117,29 +123,156 @@ namespace Samaritan.View
         {
             using (UserDialogs.Instance.Loading(AppConstant.PleaseWait))
             {
-                var response = await ApiCallHelper.UploadPost(new Post {id = AppConstant.UserId.ToString(), file = _imageSource, latitude = "23", longitude = "73" });
-                if (response != null)
+                if (AppConstant.UserId <= 0)
                 {
-                    if (response.StatusCode == HttpStatusCode.OK)
+                    await DisplayAlert(AppConstant.ErrorHeading, "Login required for upload post", AppConstant.ErrorAcceptance);
+                    return;
+                }
+                
+
+                if (await GeoLocation())
+                {
+                    var response = await ApiCallHelper.UploadPost(new Post { id = AppConstant.UserId.ToString(), file = _imageSource, latitude = Latitude.ToString(), longitude = Longitude.ToString() });
+                    if (response != null)
                     {
-                        var userDetails = JsonConvert.DeserializeObject<ResponseObject<string>>(response.Content);
-                        if (userDetails != null)
+                        if (response.StatusCode == HttpStatusCode.OK)
                         {
-                            if (userDetails.StatusCode == HttpStatusCode.BadRequest)
+                            var userDetails = JsonConvert.DeserializeObject<ResponseObject<string>>(response.Content);
+                            if (userDetails != null)
                             {
-                                return;
-                            }
-                            else
-                            {
-                                await Navigation.PushAsync(new PostList());
-                                return;
+                                if (userDetails.StatusCode == HttpStatusCode.BadRequest)
+                                {
+                                    return;
+                                }
+                                else
+                                {
+                                    await Navigation.PushAsync(new PostList());
+                                    return;
+                                }
                             }
                         }
                     }
+                    await DisplayAlert(AppConstant.ErrorHeading, AppConstant.InvalidCredentialsErrorMessage, AppConstant.ErrorAcceptance);
+                    return;
                 }
-                await DisplayAlert(AppConstant.ErrorHeading, AppConstant.InvalidCredentialsErrorMessage, AppConstant.ErrorAcceptance);
-                return;
+                else if (Longitude <= 0 && Latitude <= 0)
+                {
+                    await DisplayAlert(AppConstant.ErrorHeading, "Location not found please try agin later", AppConstant.ErrorAcceptance);
+                    return;
+                }
             }
         }
+
+        private async Task<bool> GeoLocation()
+        {
+            try
+            {
+                using (UserDialogs.Instance.Loading(AppConstant.PleaseWait))
+                {
+                    var hasPermission = await Utils.CheckPermissions(Permission.Location);
+                    if (!hasPermission)
+                    {
+                        return false;
+                    }
+
+                    var locator = CrossGeolocator.Current;
+                    locator.DesiredAccuracy = 500;
+                    var position = new Position();
+
+                    position = await locator.GetPositionAsync(TimeSpan.FromSeconds(10), null, true);
+                    if (position?.Longitude > 0 && position.Latitude > 0)
+                    {
+                        Longitude = position.Longitude;
+                        Latitude = position.Latitude;
+                        return true;
+                    }
+
+                    position = await locator.GetLastKnownLocationAsync();
+                    if (position != null)
+                    {
+                        Longitude = position.Longitude;
+                        Latitude = position.Latitude;
+                        return true;
+                    }
+
+                    if (AppConstant.Longitude > 0 && AppConstant.Latitude > 0)
+                    {
+                        Longitude = AppConstant.Longitude;
+                        Latitude = AppConstant.Latitude;
+                        return true;
+                    }
+                    //if (position != null)
+                    //{
+                    //    await UserDialogs.Instance.AlertAsync("Unable to get your location, please check if location service is ON..", "LeftBehind", "OK");
+                    //    return false;
+                    //}
+
+                    if (CrossConnectivity.Current.IsConnected == false)
+                    {
+                        await UserDialogs.Instance.AlertAsync("no inetrnet", "LeftBehind", "OK");
+                        return false;
+                    }
+
+
+                    //var locator = CrossGeolocator.Current;
+                    //locator.DesiredAccuracy = 500;
+                    //var position = await locator.GetLastKnownLocationAsync();// (TimeSpan.FromSeconds(5), null, true);
+                    //if (position == null)
+                    //{
+                    //    await UserDialogs.Instance.AlertAsync("Unable to get your location, please check if location service is ON..", "LeftBehind", "OK");
+                    //    return false;
+                    //}
+                    //if (CrossConnectivity.Current.IsConnected == false)
+                    //{
+                    //    await UserDialogs.Instance.AlertAsync("no inetrnet", "LeftBehind", "OK");
+                    //    return false;
+                    //}
+                    //Latitude = position.Latitude;
+                    //Longitude = position.Longitude;
+                }
+            }
+            catch (Exception ex)
+            {
+                await UserDialogs.Instance.AlertAsync("Unable to get your location, please check if location service is ON..", "LeftBehind", "OK");
+            }
+            return false;
+        }
+
+        private async void Upload()
+        {
+            var response = await ApiCallHelper.UploadPost(new Post { id = AppConstant.UserId.ToString(), file = _imageSource, latitude = Latitude.ToString(), longitude = Longitude.ToString() });
+            if (response != null)
+            {
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    var userDetails = JsonConvert.DeserializeObject<ResponseObject<string>>(response.Content);
+                    if (userDetails != null)
+                    {
+                        if (userDetails.StatusCode == HttpStatusCode.BadRequest)
+                        {
+                            await DisplayAlert(AppConstant.ErrorHeading, userDetails.ErrorMessage, AppConstant.ErrorAcceptance);
+                            return;
+                        }
+                        else
+                        {
+                            await Navigation.PushAsync(new PostList());
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        //public void SetControlValues()
+        //{
+        //    if (Longitude > 0 && Latitude > 0)
+        //    {
+        //        GeoPromptText.IsVisible = false;
+        //        GridLatLong.IsVisible = true;
+        //        LabelLatitude.Text = "Latitude: " + Latitude;
+        //        LabelLongitude.Text = "Longitude: " + Longitude;
+        //    }
+        //}
     }
 }
