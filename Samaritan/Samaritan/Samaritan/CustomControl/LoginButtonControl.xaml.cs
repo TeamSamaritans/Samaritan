@@ -9,13 +9,13 @@ using Xamarin.Forms.Xaml;
 
 namespace Samaritan.CustomControl
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class LoginButtonControl : ContentView
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class LoginButtonControl : ContentView
     {
-		public LoginButtonControl ()
-		{
-			InitializeComponent ();
-		}
+        public LoginButtonControl()
+        {
+            InitializeComponent();
+        }
 
         /// Bindable Property for TappedCommand
         /// </summary>
@@ -23,9 +23,7 @@ namespace Samaritan.CustomControl
 
         /// Bindable Property for TappedCommand
         /// </summary>
-        public static readonly BindableProperty SignUpTappedCommandProperty = BindableProperty.Create(nameof(SignUpTappedCommand), typeof(Command), typeof(LoginButtonControl), null);
-
-
+        public static readonly BindableProperty SkipTappedCommandProperty = BindableProperty.Create(nameof(SkipTappedCommand), typeof(Command), typeof(LoginButtonControl), null);
 
         /// <summary>
         /// Gets or sets tapped command
@@ -36,14 +34,13 @@ namespace Samaritan.CustomControl
             set { SetValue(TappedCommandProperty, value); }
         }
 
-
         /// <summary>
         /// Gets or sets tapped command
         /// </summary>
-        public Command SignUpTappedCommand
+        public Command SkipTappedCommand
         {
-            get { return (Command)GetValue(SignUpTappedCommandProperty); }
-            set { SetValue(SignUpTappedCommandProperty, value); }
+            get { return (Command)GetValue(SkipTappedCommandProperty); }
+            set { SetValue(SkipTappedCommandProperty, value); }
         }
 
         private void TapGestureRecognizer_Tapped(object sender, EventArgs e)
@@ -54,11 +51,11 @@ namespace Samaritan.CustomControl
             }
         }
 
-        private void SignUp_Tapped(object sender, EventArgs e)
+        private void TapGestureSkip_Tapped(object sender, EventArgs e)
         {
-            if (this.SignUpTappedCommand != null)
+            if (this.SkipTappedCommand != null)
             {
-                this.SignUpTappedCommand.Execute(null);
+                this.SkipTappedCommand.Execute(null);
             }
         }
     }

@@ -60,6 +60,9 @@ namespace Samaritan.View
             var mediaOptions = new Plugin.Media.Abstractions.StoreCameraMediaOptions
             {
                 Directory = "LeftBehind",
+                PhotoSize = PhotoSize.Full,
+                CompressionQuality = 50,
+                AllowCropping = true,
                 Name = "Camera.jpg",
             };
 
@@ -121,15 +124,13 @@ namespace Samaritan.View
 
         private async void UploadPost()
         {
+            if (AppConstant.UserId <= 0)
+            {
+                await DisplayAlert(AppConstant.ErrorHeading, "Login required for upload post", AppConstant.ErrorAcceptance);
+                return;
+            }
             using (UserDialogs.Instance.Loading(AppConstant.PleaseWait))
             {
-                if (AppConstant.UserId <= 0)
-                {
-                    await DisplayAlert(AppConstant.ErrorHeading, "Login required for upload post", AppConstant.ErrorAcceptance);
-                    return;
-                }
-                
-
                 if (await GeoLocation())
                 {
                     var response = await ApiCallHelper.UploadPost(new Post { id = AppConstant.UserId.ToString(), file = _imageSource, latitude = Latitude.ToString(), longitude = Longitude.ToString() });
@@ -167,7 +168,7 @@ namespace Samaritan.View
         {
             try
             {
-                using (UserDialogs.Instance.Loading(AppConstant.PleaseWait))
+                using (UserDialogs.Instance.Loading(AppConstant.GettingLocation))
                 {
                     var hasPermission = await Utils.CheckPermissions(Permission.Location);
                     if (!hasPermission)
@@ -201,34 +202,12 @@ namespace Samaritan.View
                         Latitude = AppConstant.Latitude;
                         return true;
                     }
-                    //if (position != null)
-                    //{
-                    //    await UserDialogs.Instance.AlertAsync("Unable to get your location, please check if location service is ON..", "LeftBehind", "OK");
-                    //    return false;
-                    //}
 
                     if (CrossConnectivity.Current.IsConnected == false)
                     {
                         await UserDialogs.Instance.AlertAsync("no inetrnet", "LeftBehind", "OK");
                         return false;
                     }
-
-
-                    //var locator = CrossGeolocator.Current;
-                    //locator.DesiredAccuracy = 500;
-                    //var position = await locator.GetLastKnownLocationAsync();// (TimeSpan.FromSeconds(5), null, true);
-                    //if (position == null)
-                    //{
-                    //    await UserDialogs.Instance.AlertAsync("Unable to get your location, please check if location service is ON..", "LeftBehind", "OK");
-                    //    return false;
-                    //}
-                    //if (CrossConnectivity.Current.IsConnected == false)
-                    //{
-                    //    await UserDialogs.Instance.AlertAsync("no inetrnet", "LeftBehind", "OK");
-                    //    return false;
-                    //}
-                    //Latitude = position.Latitude;
-                    //Longitude = position.Longitude;
                 }
             }
             catch (Exception ex)

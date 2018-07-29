@@ -7,14 +7,22 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-            <Frame CornerRadius="35" BackgroundColor="#2699FB" Margin="10" HorizontalOptions="Fill" HeightRequest="20">
-                <Grid>
+            <Frame CornerRadius="35" BackgroundColor="#2699FB" Margin="5" HorizontalOptions="Fill" HeightRequest="20">
+                <Grid ColumnSpacing="1">
                     <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="1"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Label x:Name="logintxt" Grid.Column="0" Text="Login" TextColor="White" VerticalOptions="Center" HorizontalOptions="Center" FontAttributes="Bold">
                         <Label.GestureRecognizers>
                             <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+                        </Label.GestureRecognizers>
+                    </Label>
+                    <BoxView Color="White" Grid.Column="1" Margin="0,-15,0,-15"/>
+                    <Label x:Name="skiptxt" Grid.Column="2" Text="Skip" TextColor="White" VerticalOptions="Center" HorizontalOptions="Center" FontAttributes="Bold">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer x:Name="tapGestureSkip" Tapped="TapGestureSkip_Tapped"/>
                         </Label.GestureRecognizers>
                     </Label>
                 </Grid>

@@ -14,5 +14,7 @@ namespace Samaritan.Classes
         public string craeted_at { get; set; }
         public string updated_at { get; set; }
         public string file { get; set; }
+
+        public string Post_date => $"Uploaded at {string.Format("{0:dd-MMM-yyyy hh:mm tt}", Convert.ToDateTime(craeted_at))}";
     }
 }

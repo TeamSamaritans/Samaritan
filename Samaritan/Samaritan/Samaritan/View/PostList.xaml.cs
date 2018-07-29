@@ -83,12 +83,12 @@ namespace Samaritan.View
 
         private async void ToolbarItem_Clicked(object sender, EventArgs e)
         {
+            if (AppConstant.UserId <= 0)
+            {
+                await DisplayAlert(AppConstant.ErrorHeading, "Login required for upload post", AppConstant.ErrorAcceptance);
+                return;
+            }
             await Navigation.PushAsync(new AddPost());
-        }
-
-        private void ToolbarItem_Clicked_1(object sender, EventArgs e)
-        {
-            
         }
     }
 }

@@ -6,10 +6,10 @@
              Title="Left Behind">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="add.png" 
+        <ToolbarItem Icon="add.png" x:Name="toolbarItemUpload"
                      Priority="0" Clicked="ToolbarItem_Clicked"/>
         <ToolbarItem Icon="logout.png"
-                     Priority="1" Clicked="ToolbarItem_Clicked_1"/>
+                     Priority="1"/>
     </ContentPage.ToolbarItems>
     
     <Grid Padding="5">
@@ -40,8 +40,7 @@
                                     <TapGestureRecognizer CommandParameter="{Binding id}"  Tapped="TapGestureRecognizer_Tapped"/>
                                 </Image.GestureRecognizers>
                             </Image>
-                            <Label Text="Updated at : 23 Jun 2018, 07:00 PM"
-                                   Grid.Row="1"/>
+                            <Label Text="{Binding Post_date}" Grid.Row="1"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

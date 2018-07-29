@@ -90,6 +90,11 @@ namespace Samaritan.Helper
         public readonly static string PleaseWait = "Please Wait";
 
         /// <summary>
+        /// Gets getting location text
+        /// </summary>
+        public readonly static string GettingLocation = "Getting location";
+
+        /// <summary>
         /// Gets default logo path
         /// </summary>
         public static string DefaultLogoPath = "defaultlogo.png";

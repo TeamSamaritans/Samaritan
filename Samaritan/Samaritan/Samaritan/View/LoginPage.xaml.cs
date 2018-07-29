@@ -22,7 +22,15 @@ namespace Samaritan.View
         {
             InitializeComponent();
             this.loginBtn.TappedCommand = new Command(this.LoginButtonTapped);
+            this.loginBtn.SkipTappedCommand = new Command(this.SkipButtonTapped);
         }
+
+        private async void SkipButtonTapped(object obj)
+        {
+            AppConstant.UserId = 0;
+            await Navigation.PushAsync(new PostList());
+        }
+
         //login button clicked event
         public async void LoginButtonTapped(object obj)
         {
