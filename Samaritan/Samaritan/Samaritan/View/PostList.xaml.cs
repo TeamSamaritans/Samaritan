@@ -1,5 +1,6 @@
 ﻿using Acr.UserDialogs;
 using Newtonsoft.Json;
+using Realms;
 using Samaritan.Classes;
 using Samaritan.Helper;
 using System;
@@ -7,18 +8,17 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
-using System.Text;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Samaritan.View
 {
-	[XamlCompilation(XamlCompilationOptions.Compile)]
-	public partial class PostList : ContentPage
-	{
+    public partial class PostList : ContentPage
+    {
         private ObservableCollection<Post> _images;
+        private string base64String;
 
         public ObservableCollection<Post> Images
         {
@@ -34,11 +34,11 @@ namespace Samaritan.View
 
         public Post ImageObject { get; set; }
 
-        public PostList ()
-		{
-			InitializeComponent ();
+        public PostList()
+        {
+            InitializeComponent();
             this.BindingContext = this;
-		}
+        }
 
         protected async override void OnAppearing()
         {
@@ -89,6 +89,34 @@ namespace Samaritan.View
                 return;
             }
             await Navigation.PushAsync(new AddPost());
+        }
+
+        private void MenuItemsListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            MenuItemsListView.SelectedItem = null;
+        }
+
+        private async Task tapGestureRecognizerSave_Tapped(object sender, EventArgs e)
+        {
+            var value = e as TappedEventArgs;
+            var post = (Post)value.Parameter;
+            if (post != null)
+            {
+               await DownLoadPost(post);
+            }
+        }
+
+        private async Task DownLoadPost(Post post)
+        {
+            var result = await ApiCallHelper.DownLoadPost(post);
+            if (!result)
+            {
+                var toastConfig = new ToastConfig("Post saved successfully!");
+                toastConfig.BackgroundColor = Color.Green;
+                toastConfig.MessageTextColor = Color.White;
+                toastConfig.Position = ToastPosition.Top;
+                UserDialogs.Instance.Toast(toastConfig);
+            }
         }
     }
 }

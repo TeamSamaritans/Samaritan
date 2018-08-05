@@ -15,11 +15,18 @@
     <PackageReference Include="FubarCoder.RestSharp.Portable" Version="3.3.0" />
     <PackageReference Include="FubarCoder.RestSharp.Portable.Core" Version="4.0.8" />
     <PackageReference Include="FubarCoder.RestSharp.Portable.HttpClient" Version="4.0.8" />
+    <PackageReference Include="Realm" Version="3.1.0" />
     <PackageReference Include="Xam.Plugin.Connectivity" Version="3.1.1" />
     <PackageReference Include="Xam.Plugin.Geolocator" Version="4.2.0" />
     <PackageReference Include="Xam.Plugin.Media" Version="3.1.2" />
     <PackageReference Include="Xam.Plugins.Settings" Version="3.1.1" />
     <PackageReference Include="Xamarin.Forms" Version="3.0.0.482510" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="View\MasterDrawerPage.xaml.cs">
+      <DependentUpon>MasterDrawerPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -32,7 +39,13 @@
     <EmbeddedResource Update="View\AddPost.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\DrawerPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="View\LoginPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\MasterDrawerPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\PostList.xaml">
@@ -41,5 +54,11 @@
     <EmbeddedResource Update="View\ShowPost.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="FodyWeavers.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

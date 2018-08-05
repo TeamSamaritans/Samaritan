@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
+using Realms;
 using RestSharp.Portable;
 using RestSharp.Portable.HttpClient;
 using Samaritan.Classes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
@@ -158,23 +160,15 @@ namespace Samaritan.Helper
         public static async Task<IRestResponse<HttpResponseMessage>> ValidateUser(LoginRequest loginRequest)
         {
             var request = new RestRequest("Site/login", Method.POST);
-            //request.AddJsonBody(loginRequest);
-            //request.AddBody(loginRequest);
             request.AddParameter("email", loginRequest.Email);
             request.AddParameter("password", loginRequest.Password);
             return await BaseRequest<HttpResponseMessage>(request, "login", true);
         }
 
-        //public static async Task<IRestResponse<HttpResponseMessage>> GetAllPosts()
-        //{
-        //    var request = new RestRequest("Record/getRecord", Method.POST);
-        //    return await BaseRequest<HttpResponseMessage>(request, "getRecord", true);
-        //}
-
         public static async Task<IRestResponse<ResponseObject<Post>>> GetAllPosts()
         {
             var request = new RestRequest("Record/getRecord", Method.GET);
-            return await BaseRequest<ResponseObject<Post>> (request, "getRecord", true);
+            return await BaseRequest<ResponseObject<Post>>(request, "getRecord", true);
         }
 
         public static async Task<IRestResponse<HttpResponseMessage>> UploadPost(Post Post)
@@ -187,6 +181,74 @@ namespace Samaritan.Helper
             return await BaseRequest<HttpResponseMessage>(request, "uploadRecord", true);
         }
 
+        public static async Task<bool> DownLoadPost(Post post)
+        {
+            if (post != null)
+            {
+                await SavePostOffline(post);
+            }
+            return false;
+        }
+
+        private static async Task<bool> SavePostOffline(Post post)
+        {
+            string base64String = await GetImageAsBase64Url(post.image_src);
+            var realmDb = Realm.GetInstance();
+            var result = false;
+            var localPost = new Post()
+            {
+                id = post.id,
+                craeted_at = post.craeted_at,
+                user_id = post.user_id,
+                updated_at = post.updated_at,
+                latitude = post.latitude,
+                longitude = post.longitude,
+                file = base64String,
+                image_src = post.image_src
+            };
+            try
+            {
+                realmDb.Write(() =>
+                    {
+                        realmDb.Add(localPost);
+                    });
+                result = true;
+            }
+            catch (Exception ex)
+            {
+                result = false;
+            }
+            //var postList = realmDb.All<Post>().ToList();
+            return result;
+        }
+
+        public static Post GetPostAsync(string id)
+        {
+            var realmDb = Realm.GetInstance();
+            var result =  realmDb.All<Post>().FirstOrDefault(b => b.id == id);
+            return result;
+        }
+
+        private async static Task<string> GetImageAsBase64Url(string url)
+        {
+            TaskCompletionSource<string> tcs = new TaskCompletionSource<string>();
+            var handler = new HttpClientHandler();
+            using (var client = new HttpClient(handler))
+            {
+                await client.GetByteArrayAsync(url).ContinueWith(t =>
+                {
+                    if (t.Status == TaskStatus.RanToCompletion)
+                    {
+                        tcs.SetResult(Convert.ToBase64String(t.Result));
+                    }
+                    else
+                    {
+                        tcs.SetResult(string.Empty);
+                    }
+                });
+                return tcs.Task.Result;
+            }
+        }
         //public static async Task<IRestResponse<HttpResponseMessage>> UserRegistration(RegistrationRequest registrationRequest)
         //{
         //    var request = new RestRequest("user/signup", Method.POST);

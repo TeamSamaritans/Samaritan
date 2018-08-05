@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                  xmlns:pages="clr-namespace:Samaritan.View"
+                  x:Class="Samaritan.View.MasterDrawerPage"
+                  Title="MasterPage"
+             NavigationPage.HasNavigationBar="False">
+    <MasterDetailPage.Master>
+        <pages:DrawerPage x:Name="MasterPage" Title="MasterPage"/>
+    </MasterDetailPage.Master>
+    <MasterDetailPage.Detail>
+        <ContentPage>
+        </ContentPage>
+    </MasterDetailPage.Detail>
+</MasterDetailPage>

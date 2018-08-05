@@ -22,6 +22,7 @@
                FontAttributes="Bold"/>
         <ListView Grid.Row="1"
                   HasUnevenRows="True"
+                  ItemTapped="MenuItemsListView_ItemTapped"
                   x:Name="MenuItemsListView"
                   SeparatorVisibility="None"
                   ItemsSource="{Binding Images}">
@@ -40,7 +41,20 @@
                                     <TapGestureRecognizer CommandParameter="{Binding id}"  Tapped="TapGestureRecognizer_Tapped"/>
                                 </Image.GestureRecognizers>
                             </Image>
-                            <Label Text="{Binding Post_date}" Grid.Row="1"/>
+                            <Grid Grid.Row="1" Margin="5,5,10,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Label Text="{Binding Post_date}" Grid.Column="0"/>
+                                <Image Grid.Column="1" Source="save.png" HeightRequest="25" Margin="0,5">
+                                    <Image.GestureRecognizers>
+                                        <TapGestureRecognizer x:Name="tapGestureRecognizerSave" CommandParameter="{Binding .}"  Tapped="tapGestureRecognizerSave_Tapped"/>
+                                    </Image.GestureRecognizers>
+                                </Image>
+                                    <Image Grid.Column="2" Source="share.png" HeightRequest="25"/>
+                            </Grid>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

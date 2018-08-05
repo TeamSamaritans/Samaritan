@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Samaritan.View.DrawerPage"
+             BackgroundColor="Black">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="WhiteSeparator" TargetType="BoxView">
+                <Setter Property="Color" Value="White"/>
+                <Setter Property="Margin" Value="7,0"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout>
+        <Grid >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1"/>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="1"/>
+            </Grid.RowDefinitions>
+
+            <StackLayout Grid.Row="0" Orientation="Horizontal" Padding="10" Spacing="10">
+                <Image Source="smile.png" VerticalOptions="Center" />
+                <Label Text="INVITE FRIENDS" VerticalOptions="Center" HorizontalOptions="Start" TextColor="White"/>
+                <StackLayout.GestureRecognizers>
+                    <!--<TapGestureRecognizer Tapped="OnInviteFriendsTapped"/>-->
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <BoxView Grid.Row="1" Style="{StaticResource WhiteSeparator}"/>
+
+            <StackLayout Grid.Row="2" Orientation="Horizontal" Padding="10" Spacing="10">
+                <Image Source="userEdit.png" VerticalOptions="Center" />
+                <Label Text="EDIT PROFILE" VerticalOptions="Center" HorizontalOptions="Start" TextColor="White"/>
+                <StackLayout.GestureRecognizers>
+                    <!--<TapGestureRecognizer Tapped="EditProfileTapGestureRecognizer_Tapped"/>-->
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <BoxView Grid.Row="3" Style="{StaticResource WhiteSeparator}"/>
+
+            <StackLayout Grid.Row="4" Orientation="Horizontal" Padding="10" Spacing="10">
+                <Image Source="myfavorite.png" VerticalOptions="Center" HeightRequest="15"/>
+                <Label Text="MY FAVORITES" VerticalOptions="Center" HorizontalOptions="Start" TextColor="White"/>
+                <StackLayout.GestureRecognizers>
+                    <!--<TapGestureRecognizer x:Name="favoriteGesture" Tapped="OnMyFavoriteTapped"/>-->
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <BoxView Grid.Row="5" Style="{StaticResource WhiteSeparator}"/>
+
+            <StackLayout Grid.Row="6" Orientation="Horizontal" Padding="10" Spacing="10">
+                <Image Source="userSetting.png" VerticalOptions="Center" />
+                <Label Text="SETTINGS" VerticalOptions="Center" HorizontalOptions="Start" TextColor="White"/>
+                <StackLayout.GestureRecognizers>
+                    <!--<TapGestureRecognizer Tapped="SettingPageTapGestureRecognizer_Tapped"/>-->
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <BoxView Grid.Row="7" Style="{StaticResource WhiteSeparator}"/>
+
+            <StackLayout Grid.Row="8" Orientation="Horizontal" Padding="10" Spacing="10">
+                <!--<Image x:Name="logInOutImg" Source="logout.png" HeightRequest="20" VerticalOptions="Center" />-->
+                <Label x:Name="UserLogs" Text="LOGOUT" VerticalOptions="Center" HorizontalOptions="Start" TextColor="White"/>
+                <StackLayout.GestureRecognizers>
+                    <!--<TapGestureRecognizer x:Name="logoutGesture" Tapped="OnLogoutTapped"/>-->
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+
+            <BoxView Grid.Row="7" Style="{StaticResource WhiteSeparator}"/>
+
+        </Grid>
+    </StackLayout>
+</ContentPage>

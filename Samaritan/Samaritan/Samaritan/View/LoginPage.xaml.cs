@@ -28,7 +28,7 @@ namespace Samaritan.View
         private async void SkipButtonTapped(object obj)
         {
             AppConstant.UserId = 0;
-            await Navigation.PushAsync(new PostList());
+            await Navigation.PushAsync(new MasterDrawerPage());
         }
 
         //login button clicked event
@@ -95,7 +95,7 @@ namespace Samaritan.View
                                 //Plugin.Settings.UserProfileSettings = (loggedInSwitch.IsToggled ? JsonConvert.SerializeObject(new LoginRequest { Email = email, Password = password, UserId = userId, Provider = AuthenticatorProvider.NSL }) : string.Empty);
                                 AppConstant.UserId = userId;
                                 //AppConstant.Provider = AuthenticatorProvider.NSL.ToString();
-                                await Navigation.PushAsync(new PostList());
+                                await Navigation.PushAsync(new MasterDrawerPage());
                                 return;
                             }
                         }
