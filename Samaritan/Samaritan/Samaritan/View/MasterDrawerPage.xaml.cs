@@ -10,7 +10,13 @@ namespace Samaritan.View
         public MasterDrawerPage()
         {
             InitializeComponent();
-            this.Detail = new NavigationPage(new PostList());
+            this.Detail = new NavigationPage(new PostList(string.Empty));
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            this.IsPresented = false;
         }
     }
 }

@@ -18,7 +18,19 @@ namespace Samaritan.View
     public partial class PostList : ContentPage
     {
         private ObservableCollection<Post> _images;
-        private string base64String;
+        
+        private bool _isPageLoaded;
+
+        private bool _isOffLine;
+
+        public bool IsOffline
+        {
+            get { return _isOffLine; }
+            set { _isOffLine = value;
+                AppConstant.IsOnline = !_isOffLine;
+                OnPropertyChanged("IsOffline");
+            }
+        }
 
         public ObservableCollection<Post> Images
         {
@@ -34,16 +46,50 @@ namespace Samaritan.View
 
         public Post ImageObject { get; set; }
 
-        public PostList()
+        public PostList(string title, bool isOffLine = false)
         {
             InitializeComponent();
+            IsOffline = isOffLine;
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                Title = (string.IsNullOrWhiteSpace(title) == false ? title : "Left Behind");
+            });
+            NavigationPage.SetHasBackButton(this, true);
             this.BindingContext = this;
+        }
+
+        private void AddToolBarItem()
+        {
+            if (IsOffline == false)
+            {
+                this.ToolbarItems.Clear();
+                var toolBarItem = new ToolbarItem
+                {
+                    Icon = "add.png",
+                    Priority = 1
+                };
+                toolBarItem.Clicked += ToolbarItemClicked;
+                this.ToolbarItems.Add(toolBarItem);
+            }
         }
 
         protected async override void OnAppearing()
         {
             base.OnAppearing();
-            await GetPosts();
+            AddToolBarItem();
+            if (_isOffLine)
+            {
+                GetOfflineSavedPosts();
+            }
+            else
+            {
+                if (_isPageLoaded)
+                {
+                    return;
+                }
+                _isPageLoaded = true;
+                await GetPosts();
+            }
         }
 
         private async Task GetPosts()
@@ -72,6 +118,18 @@ namespace Samaritan.View
             }
         }
 
+        private void GetOfflineSavedPosts()
+        {
+            using (UserDialogs.Instance.Loading(AppConstant.PleaseWait))
+            {
+                var result = ApiCallHelper.GetOfflineSavedPosts();
+                if (result != null)
+                {
+                    Images = new ObservableCollection<Post>(result);
+                }
+            }
+        }
+
         private async void TapGestureRecognizer_Tapped(object sender, EventArgs e)
         {
             var value = e as TappedEventArgs;
@@ -81,7 +139,7 @@ namespace Samaritan.View
             }
         }
 
-        private async void ToolbarItem_Clicked(object sender, EventArgs e)
+        private async void ToolbarItemClicked(object sender, EventArgs e)
         {
             if (AppConstant.UserId <= 0)
             {
@@ -98,23 +156,35 @@ namespace Samaritan.View
 
         private async Task tapGestureRecognizerSave_Tapped(object sender, EventArgs e)
         {
+            AppConstant.IsOnline = true;
             var value = e as TappedEventArgs;
             var post = (Post)value.Parameter;
             if (post != null)
             {
-               await DownLoadPost(post);
+                await DownLoadPost(post);
             }
         }
 
         private async Task DownLoadPost(Post post)
         {
             var result = await ApiCallHelper.DownLoadPost(post);
-            if (!result)
+            var msg = string.Empty;
+            if (result == HttpStatusCode.Created)
             {
-                var toastConfig = new ToastConfig("Post saved successfully!");
-                toastConfig.BackgroundColor = Color.Green;
-                toastConfig.MessageTextColor = Color.White;
-                toastConfig.Position = ToastPosition.Top;
+                msg = "Post saved successfully";
+            }
+            else if (result == HttpStatusCode.Found)
+            {
+                msg = "Post already exists";
+            }
+            if (string.IsNullOrWhiteSpace(msg) == false)
+            {
+                var toastConfig = new ToastConfig(msg)
+                {
+                    BackgroundColor = Color.Green,
+                    MessageTextColor = Color.White,
+                    Position = ToastPosition.Top
+                };
                 UserDialogs.Instance.Toast(toastConfig);
             }
         }

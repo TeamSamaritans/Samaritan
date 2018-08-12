@@ -21,6 +21,8 @@ namespace Samaritan.Helper
         /// </summary>
         public static User LoginUser { get; set; }
 
+        public static bool IsOnline { get; set; }
+
         /// <summary>
         /// Gets acceptance text
         /// </summary>

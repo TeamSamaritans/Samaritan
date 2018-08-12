@@ -2,15 +2,10 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Samaritan.View.PostList"
+             xmlns:local="clr-namespace:Samaritan.Helper"
              NavigationPage.HasBackButton="False"
              Title="Left Behind">
 
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Icon="add.png" x:Name="toolbarItemUpload"
-                     Priority="0" Clicked="ToolbarItem_Clicked"/>
-        <ToolbarItem Icon="logout.png"
-                     Priority="1"/>
-    </ContentPage.ToolbarItems>
     
     <Grid Padding="5">
         <Grid.RowDefinitions>
@@ -48,7 +43,7 @@
                                     <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
                                 <Label Text="{Binding Post_date}" Grid.Column="0"/>
-                                <Image Grid.Column="1" Source="save.png" HeightRequest="25" Margin="0,5">
+                                <Image Grid.Column="1" Source="addto.png" HeightRequest="25" Margin="0,5" IsVisible="{x:Static local:AppConstant.IsOnline}">
                                     <Image.GestureRecognizers>
                                         <TapGestureRecognizer x:Name="tapGestureRecognizerSave" CommandParameter="{Binding .}"  Tapped="tapGestureRecognizerSave_Tapped"/>
                                     </Image.GestureRecognizers>

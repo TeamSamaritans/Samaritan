@@ -5,6 +5,7 @@ using RestSharp.Portable.HttpClient;
 using Samaritan.Classes;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -181,20 +182,24 @@ namespace Samaritan.Helper
             return await BaseRequest<HttpResponseMessage>(request, "uploadRecord", true);
         }
 
-        public static async Task<bool> DownLoadPost(Post post)
+        public static async Task<HttpStatusCode> DownLoadPost(Post post)
         {
             if (post != null)
             {
-                await SavePostOffline(post);
+                return await SavePostOffline(post);
             }
-            return false;
+            return HttpStatusCode.NotFound;
         }
 
-        private static async Task<bool> SavePostOffline(Post post)
+        private static async Task<HttpStatusCode> SavePostOffline(Post post)
         {
+            var realmDb = GetRealm();
+            var result = HttpStatusCode.NotFound;
+            if (GetPostAsync(post.id) != null)
+            {
+                return HttpStatusCode.Found;
+            }
             string base64String = await GetImageAsBase64Url(post.image_src);
-            var realmDb = Realm.GetInstance();
-            var result = false;
             var localPost = new Post()
             {
                 id = post.id,
@@ -212,21 +217,31 @@ namespace Samaritan.Helper
                     {
                         realmDb.Add(localPost);
                     });
-                result = true;
+                result = HttpStatusCode.Created;
             }
             catch (Exception ex)
             {
-                result = false;
+                result = HttpStatusCode.ExpectationFailed;
             }
-            //var postList = realmDb.All<Post>().ToList();
+            return result;
+        }
+
+        public static List<Post> GetOfflineSavedPosts()
+        {
+            var result = GetRealm().All<Post>().ToList();
             return result;
         }
 
         public static Post GetPostAsync(string id)
         {
-            var realmDb = Realm.GetInstance();
+            var realmDb = GetRealm();
             var result =  realmDb.All<Post>().FirstOrDefault(b => b.id == id);
             return result;
+        }
+
+        private static Realm GetRealm()
+        {
+            return Realm.GetInstance();
         }
 
         private async static Task<string> GetImageAsBase64Url(string url)

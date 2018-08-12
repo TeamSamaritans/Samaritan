@@ -147,7 +147,7 @@ namespace Samaritan.View
                                 }
                                 else
                                 {
-                                    await Navigation.PushAsync(new PostList());
+                                    await Navigation.PushAsync(new PostList(string.Empty));
                                     return;
                                 }
                             }
@@ -234,7 +234,7 @@ namespace Samaritan.View
                         }
                         else
                         {
-                            await Navigation.PushAsync(new PostList());
+                            await Navigation.PushAsync(new PostList(string.Empty));
                             return;
                         }
                     }
